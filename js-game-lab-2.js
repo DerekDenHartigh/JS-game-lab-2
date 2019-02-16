@@ -81,6 +81,7 @@
 // Part 2:
 
 (function () {
+
 function startGame(){ // The game, you just lost it.
     let gameAnswer = prompt("*Jigsaw Voice*\nDo You Want to Play a Game?").toLowerCase();
     if (gameAnswer==="yes"||gameAnswer==="ya"||gameAnswer==="yeah"||gameAnswer==="yeet"||gameAnswer==="yup"||gameAnswer==="uhuh"||gameAnswer==="affirmative"||gameAnswer==="fo sho"||gameAnswer==="you know it"){
@@ -102,13 +103,19 @@ function startCombat(){
     let grantHP = 10;
     let userWins = 0;
     let retreat = false;
+    let userHP = 40;
+    let attackObject = {
+        weapon: userWeapon,
+        damage: userDamage,
+        attack: attackType
+    }
     getDifficulty();
-    getDamage();
+    getDamage2();
     while (userHP>0 && userWins<3 && retreat===false){
         userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0
-        grantHP-= attackObject.damage;
-        console.log(`Grant swings at ${userName},\n\t${userName}'s HP = ${userHP}`);
-        console.log(`${userName} ${attackObject.attack} at Grant,\n\tGrant's HP = ${grantHP}`);
+        grantHP-= userWeapon.damage;
+        console.log(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
+        console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
         if (grantHP<=0){
             console.log("I am REBORN!!!\n\t-Grant")
             grantHP = 10;
@@ -123,23 +130,37 @@ function startCombat(){
     else {console.log(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
 }
 
-function getDamage(){
+// function getDamage(){
+//     let userDamage;
+//     let attackType;
+//     let userWeapon = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
+//     switch(userWeapon){
+//         case "fists": userDamage = Math.floor((Math.random()*3)); attackType = "punches"; break; // I wanted to include 0 in this version
+//         case "sword": userDamage = Math.floor((Math.random()*5)); attackType = "slashes"; break; // to account for misses
+//         case "glock": userDamage = Math.floor((Math.random()*10)); attackType = "fires"; break; // crits would be a nice touch, but...
+//         case "bfg": userDamage = Math.floor((Math.random()*100)); attackType = "kerpows"; break; // I'm just going to get this working first.
+//         default: console.log("ERROR"); break;}
+//     let attackObject = {
+//         weapon: userWeapon,
+//         damage: userDamage,
+//         attack: attackType
+//     }
+//     return attackObject;  // wanted different actions of the user, can't return 2 variables that I know of, but I can return an object or array
+// } 
+// wondering if I should set the userWeapon to objects w/ type, damage, and attacktyped properties...
+/* lets see what that would look like: */
+function getDamage2(){
     let userDamage;
     let attackType;
-    let userWeapon = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
-    switch(userWeapon){
-        case "fists": userDamage = Math.floor((Math.random()*3)); attackType = "punches"; break; // I wanted to include 0 in this version
-        case "sword": userDamage = Math.floor((Math.random()*5)); attackType = "slashes"; break; // to account for misses
-        case "glock": userDamage = Math.floor((Math.random()*10)); attackType = "fires"; break; // crits would be a nice touch, but...
-        case "bfg": userDamage = Math.floor((Math.random()*100)); attackType = "kerpows"; break; // I'm just going to get this working first.
-        default: console.log("ERROR"); break;}
-    let attackObject = {
-        weapon: userWeapon,
-        damage: userDamage,
-        attack: attackType
+    let weaponSelection = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
+    switch(weaponSelection){
+        case "fists": userWeapon ={type: "fists", damage: Math.floor((Math.random()*3)), attackType = "punches"}; return userWeapon; // I wanted to include 0 in this version
+        case "sword": userWeapon ={type: "sword", damage: Math.floor((Math.random()*5)), attackType = "slashes"}; return userWeapon; // to account for misses
+        case "glock": userWeapon ={type: "glock", damage: Math.floor((Math.random()*10)), attackType = "fires"}; return userWeapon; // crits would be a nice touch, but...
+        case "bfg": userWeapon ={type: "bfg", damage: Math.floor((Math.random()*100)), attackType = "kerpows"}; return userWeapon; // I'm just going to get this working first.
+        default: console.log("ERROR"); return;}
+// end alt getDamage function
     }
-    return attackObject;  // wanted different actions of the user, can't return 2 variables that I know of, but I can return an object or array
-}
 
 function getDifficulty(){
  let gameDifficulty = prompt("Select your difficulty level:\n\tEasy\n\tMedium\n\tHard\n\tImpossible").toLowerCase();
