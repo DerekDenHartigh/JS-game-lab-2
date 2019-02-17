@@ -81,41 +81,41 @@
 // Part 2:
 
 (function () {
-
+let userName;
 function startGame(){ // The game, you just lost it.
     let gameAnswer = prompt("*Jigsaw Voice*\nDo You Want to Play a Game?").toLowerCase();
     if (gameAnswer==="yes"||gameAnswer==="ya"||gameAnswer==="yeah"||gameAnswer==="yeet"||gameAnswer==="yup"||gameAnswer==="uhuh"||gameAnswer==="affirmative"||gameAnswer==="fo sho"||gameAnswer==="you know it"){
-        let userName = prompt("What name shall I have them inscribe upon your epitaph?")
-        if (userName==="") {
-            while (userName===("")){
-            console.log(`\n\n\nAnswer ME! I am Grant the mighty`);
-            userName = prompt("TELL ME YOUR NAME!!!"); 
-            }
-        }
-        startCombat()
+        userName = getName();
+        startCombat();
     }
     else {
         console.log("That is too bad.. I would have crushed you!")
     }; return; // return just to end program
-    }   
+}  
+ 
+    function getName(){
+        let userName = prompt("What name shall I have them inscribe upon your epitaph?")
+            if (userName==="") {
+                while (userName===("")){
+                console.log(`\n\n\nAnswer ME! I am Grant the mighty`);
+                userName = prompt("TELL ME YOUR NAME!!!"); 
+                }
+            }
+        return userName; // i don't think I need to do this return?
+    }
 
 function startCombat(){
     let grantHP = 10;
     let userWins = 0;
     let retreat = false;
-    let userHP = 40;
-    let attackObject = {
-        weapon: userWeapon,
-        damage: userDamage,
-        attack: attackType
-    }
-    getDifficulty();
-    getDamage2();
+    let userHP = getDifficulty();
+    let weapon = getDamage2();
+
     while (userHP>0 && userWins<3 && retreat===false){
         userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0
-        grantHP-= userWeapon.damage;
+        grantHP-= weapon.damage;
         console.log(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
-        console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
+        console.log(`${userName} ${weapon.attackType} at Grant with their ${weapon.type},\n\tGrant's HP = ${grantHP}`);
         if (grantHP<=0){
             console.log("I am REBORN!!!\n\t-Grant")
             grantHP = 10;
@@ -150,16 +150,15 @@ function startCombat(){
 // wondering if I should set the userWeapon to objects w/ type, damage, and attacktyped properties...
 /* lets see what that would look like: */
 function getDamage2(){
-    let userDamage;
-    let attackType;
+    let userWeapon;
     let weaponSelection = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
     switch(weaponSelection){
-        case "fists": userWeapon ={type: "fists", damage: Math.floor((Math.random()*3)), attackType = "punches"}; return userWeapon; // I wanted to include 0 in this version
-        case "sword": userWeapon ={type: "sword", damage: Math.floor((Math.random()*5)), attackType = "slashes"}; return userWeapon; // to account for misses
-        case "glock": userWeapon ={type: "glock", damage: Math.floor((Math.random()*10)), attackType = "fires"}; return userWeapon; // crits would be a nice touch, but...
-        case "bfg": userWeapon ={type: "bfg", damage: Math.floor((Math.random()*100)), attackType = "kerpows"}; return userWeapon; // I'm just going to get this working first.
-        default: console.log("ERROR"); return;}
-// end alt getDamage function
+        case "fists": userWeapon ={type: "fists", damage: Math.floor((Math.random()*3)), attackType : "punches"}; break; // I wanted to include 0 in this version
+        case "sword": userWeapon ={type: "sword", damage: Math.floor((Math.random()*5)), attackType : "slashes"}; break;  // to account for misses
+        case "glock": userWeapon ={type: "glock", damage: Math.floor((Math.random()*10)), attackType : "fires"}; break; // crits would be a nice touch, but...
+        case "bfg": userWeapon ={type: "bfg", damage: Math.floor((Math.random()*100)), attackType : "kerpows"}; break; // I'm just going to get this working first.
+        default: console.log("ERROR"); break;}
+        return userWeapon;
     }
 
 function getDifficulty(){
