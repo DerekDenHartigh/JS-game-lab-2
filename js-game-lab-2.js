@@ -82,6 +82,7 @@
 
 (function () {
 let userName;
+let userWeapon;
 function startGame(){ // The game, you just lost it.
     let gameAnswer = prompt("*Jigsaw Voice*\nDo You Want to Play a Game?").toLowerCase();
     if (gameAnswer==="yes"||gameAnswer==="ya"||gameAnswer==="yeah"||gameAnswer==="yeet"||gameAnswer==="yup"||gameAnswer==="uhuh"||gameAnswer==="affirmative"||gameAnswer==="fo sho"||gameAnswer==="you know it"){
@@ -89,7 +90,7 @@ function startGame(){ // The game, you just lost it.
         startCombat();
     }
     else {
-        console.log("That is too bad.. I would have crushed you!")
+        console.warn("That is too bad.. I would have crushed you!")
     }; return; // return just to end program
 }  
  
@@ -97,7 +98,7 @@ function startGame(){ // The game, you just lost it.
         let userName = prompt("What name shall I have them inscribe upon your epitaph?")
             if (userName==="") {
                 while (userName===("")){
-                console.log(`\n\n\nAnswer ME! I am Grant the mighty`);
+                console.error(`\n\n\nAnswer ME! I am Grant the mighty`);
                 userName = prompt("TELL ME YOUR NAME!!!"); 
                 }
             }
@@ -109,25 +110,24 @@ function startCombat(){
     let userWins = 0;
     let retreat = false;
     let userHP = getDifficulty();
-    let weapon = getDamage2();
-
+    let userWeapon = weaponSelection(); // this should define user weapon by user selectin
     while (userHP>0 && userWins<3 && retreat===false){
         userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0
-        grantHP-= weapon.damage;
-        console.log(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
-        console.log(`${userName} ${weapon.attackType} at Grant with their ${weapon.type},\n\tGrant's HP = ${grantHP}`);
+        grantHP-= damageCalculation(userWeapon.damage);
+        console.error(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
+        console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
         if (grantHP<=0){
-            console.log("I am REBORN!!!\n\t-Grant")
+            console.warn("I am REBORN!!!\n\t-Grant")
             grantHP = 10;
             userWins++;
         }
         let retreatResponse = prompt("Do you wish to flee?").toLowerCase();
         if (retreatResponse==="yes"||retreatResponse==="ya"||retreatResponse==="yeah"||retreatResponse==="yeet"||retreatResponse==="yup"||retreatResponse==="uhuh"||retreatResponse==="affirmative"||retreatResponse==="fo sho"||retreatResponse==="you know it"){
-            let retreat = true;
+            retreat = true;
         }
     }
-    if (userWins>=3) {console.log(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
-    else {console.log(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
+    if (userWins>=3) {console.warn(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
+    else {console.error(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
 }
 
 // function getDamage(){
@@ -149,18 +149,30 @@ function startCombat(){
 // } 
 // wondering if I should set the userWeapon to objects w/ type, damage, and attacktyped properties...
 /* lets see what that would look like: */
-function getDamage2(){
-    let userWeapon;
+
+function weaponSelection(){
     let weaponSelection = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
     switch(weaponSelection){
-        case "fists": userWeapon ={type: "fists", damage: Math.floor((Math.random()*3)), attackType : "punches"}; break; // I wanted to include 0 in this version
-        case "sword": userWeapon ={type: "sword", damage: Math.floor((Math.random()*5)), attackType : "slashes"}; break;  // to account for misses
-        case "glock": userWeapon ={type: "glock", damage: Math.floor((Math.random()*10)), attackType : "fires"}; break; // crits would be a nice touch, but...
-        case "bfg": userWeapon ={type: "bfg", damage: Math.floor((Math.random()*100)), attackType : "kerpows"}; break; // I'm just going to get this working first.
-        default: console.log("ERROR"); break;}
+        case "fists": userWeapon ={type: "fists", attackType : "punches"}; break; // removed userAttackDamage from object because
+        case "sword": userWeapon ={type: "sword", attackType : "slashes"}; break; // once calculated it was static which made the game
+        case "glock": userWeapon ={type: "glock", attackType : "fires"}; break; // uninteresting and sometimes impossible, made a new switch in
+        case "bfg": userWeapon ={type: "bfg", attackType : "kerpows"}; break; // the function damageCalculation()
+        case "upupdowndownleftrightleftrightba": userWeapon={type: "battle-axe", attackType : "swings"}; break; // Grant's battle-axe, only the l337 pl4y3r5 c4n u53 17!
+        default: console.error("ERROR"); break;}
         return userWeapon;
     }
-
+function damageCalculation(){
+   let userAttackDamage;
+    switch(userWeapon.type){
+        case "fists": userAttackDamage = Math.floor((Math.random()*3)); break;
+        case "sword": userAttackDamage = Math.floor((Math.random()*5)); break;
+        case "glock": userAttackDamage = Math.floor((Math.random()*10)); break;
+        case "bfg": userAttackDamage = Math.floor((Math.random()*100)); break;
+        case "upupdowndownleftrightleftrightba": userAttackDamage = Math.floor((Math.random()*7)); break;
+        default: console.error("ERROR");
+    }
+    return userAttackDamage;
+}
 function getDifficulty(){
  let gameDifficulty = prompt("Select your difficulty level:\n\tEasy\n\tMedium\n\tHard\n\tImpossible").toLowerCase();
     let userHP = 40;
