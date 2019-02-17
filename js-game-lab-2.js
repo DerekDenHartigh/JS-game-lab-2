@@ -127,7 +127,7 @@ function startCombat(){
         }
     }
     if (userWins>=3 && userHP<=0) console.log(`With a mighty final blow ${userName} shatter's Grant's regeneration stone, destroying both ${userName} and Grant in the process.\nWhile the people mourned ${userName}'s sacrifice, they were able to do so freely and in peace now that Grant the mighty no longer ruled over them.\nIn time, the bittersweet memory of that day faded to myth and the townsfolk lived happily ever after, completely unaware of the ultimate sacrifice that ${userName} had made for them`);
-    if (userWins>=3 && userHP>0) {console.warn(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
+    if (userWins>=3 && userHP>0) {console.warn(`*Grant's regeneration stone falls to the ground and ${userName} crushes it underfoot with a mighty stomp*\n"NOOOO!"\n\t-Grant\n *Grant lets out a final death rattle*\n${userName} is WINNER!  Grant the Mighty is Defeat`)}
     if (userWins<3) {console.error(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
 }
 
