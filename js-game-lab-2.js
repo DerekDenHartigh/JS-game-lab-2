@@ -110,10 +110,18 @@ function startCombat(){
     let userWins = 0;
     let retreat = false;
     let userHP = getDifficulty();
-    let userWeapon = weaponSelection(); // this should define user weapon by user selectin
+    let userWeapon = weaponSelection(); // this should define user weapon by user selection
+    console.log(userWeapon); // for testing
+    let grantsWeapon = weaponSelection("upupdowndownleftrightleftrightba");
+    console.log (grantsWeapon); // tested - returns {type: "battle-axe", attackType: "swings"}
     while (userHP>0 && userWins<3 && retreat===false){
-        userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0
-        grantHP-= damageCalculation(userWeapon.damage);
+        let retreatResponse = prompt("Do you wish to flee?").toLowerCase();
+        if (retreatResponse==="yes"||retreatResponse==="ya"||retreatResponse==="yeah"||retreatResponse==="yeet"||retreatResponse==="yup"||retreatResponse==="uhuh"||retreatResponse==="affirmative"||retreatResponse==="fo sho"||retreatResponse==="you know it"){
+            retreat = true;
+        }
+        userHP-= damageCalculation(grantsWeapon.type)
+        // userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0 - was going to call a function for Grant's battleaxe, but was having trouble calling the same function as I use to generate Grant's damage - i.e. the damage outputs were equal
+        grantHP-= damageCalculation(userWeapon.type);
         console.error(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
         console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
         if (grantHP<=0){
@@ -121,12 +129,9 @@ function startCombat(){
             grantHP = 10;
             userWins++;
         }
-        let retreatResponse = prompt("Do you wish to flee?").toLowerCase();
-        if (retreatResponse==="yes"||retreatResponse==="ya"||retreatResponse==="yeah"||retreatResponse==="yeet"||retreatResponse==="yup"||retreatResponse==="uhuh"||retreatResponse==="affirmative"||retreatResponse==="fo sho"||retreatResponse==="you know it"){
-            retreat = true;
-        }
     }
-    if (userWins>=3) {console.warn(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
+    if (userWins>=3 && userHP<=0) console.log(`With a mighty blow ${userName} shatter's Grant's regeneration stone, destroying both in the process.\nWhile the people still mourn ${userName}'s sacrifice, they are free to do so in peace now that Grant the mighty no longer rules over them.\nIn time, the bittersweet memory of that day fades to myth and the townsfolk live happily and free, completely unaward of the sacrifices made for them`);
+    if (userWins>=3 && userHP>0) {console.warn(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
     else {console.error(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
 }
 
@@ -150,7 +155,7 @@ function startCombat(){
 // wondering if I should set the userWeapon to objects w/ type, damage, and attacktyped properties...
 /* lets see what that would look like: */
 
-function weaponSelection(){
+function weaponSelection(weaponSelection){
     let weaponSelection = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
     switch(weaponSelection){
         case "fists": userWeapon ={type: "fists", attackType : "punches"}; break; // removed userAttackDamage from object because
@@ -168,7 +173,7 @@ function damageCalculation(){
         case "sword": userAttackDamage = Math.floor((Math.random()*5)); break;
         case "glock": userAttackDamage = Math.floor((Math.random()*10)); break;
         case "bfg": userAttackDamage = Math.floor((Math.random()*100)); break;
-        case "upupdowndownleftrightleftrightba": userAttackDamage = Math.floor((Math.random()*7)); break;
+        case "battle-axe": userAttackDamage = Math.floor((Math.random()*7)); break;
         default: console.error("ERROR");
     }
     return userAttackDamage;
