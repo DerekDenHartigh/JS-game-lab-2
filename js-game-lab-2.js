@@ -111,16 +111,12 @@ function startCombat(){
     let retreat = false;
     let userHP = getDifficulty();
     let userWeapon = weaponSelection(); // this should define user weapon by user selection
-    console.log(userWeapon); // for testing
-    let grantsWeapon = weaponSelection("upupdowndownleftrightleftrightba");
-    console.log (grantsWeapon); // tested - returns {type: "battle-axe", attackType: "swings"}
     while (userHP>0 && userWins<3 && retreat===false){
         let retreatResponse = prompt("Do you wish to flee?").toLowerCase();
         if (retreatResponse==="yes"||retreatResponse==="ya"||retreatResponse==="yeah"||retreatResponse==="yeet"||retreatResponse==="yup"||retreatResponse==="uhuh"||retreatResponse==="affirmative"||retreatResponse==="fo sho"||retreatResponse==="you know it"){
-            retreat = true;
+            retreat = true; break;
         }
-        userHP-= damageCalculation(grantsWeapon.type)
-        // userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0 - was going to call a function for Grant's battleaxe, but was having trouble calling the same function as I use to generate Grant's damage - i.e. the damage outputs were equal
+        userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0 - was going to call a function for Grant's battleaxe, but was having trouble calling the same function as I use to generate Grant's damage - i.e. the damage outputs were equal
         grantHP-= damageCalculation(userWeapon.type);
         console.error(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
         console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
@@ -130,9 +126,9 @@ function startCombat(){
             userWins++;
         }
     }
-    if (userWins>=3 && userHP<=0) console.log(`With a mighty blow ${userName} shatter's Grant's regeneration stone, destroying both in the process.\nWhile the people still mourn ${userName}'s sacrifice, they are free to do so in peace now that Grant the mighty no longer rules over them.\nIn time, the bittersweet memory of that day fades to myth and the townsfolk live happily and free, completely unaward of the sacrifices made for them`);
+    if (userWins>=3 && userHP<=0) console.log(`With a mighty final blow ${userName} shatter's Grant's regeneration stone, destroying both ${userName} and Grant in the process.\nWhile the people mourned ${userName}'s sacrifice, they were able to do so freely and in peace now that Grant the mighty no longer ruled over them.\nIn time, the bittersweet memory of that day faded to myth and the townsfolk lived happily ever after, completely unaware of the ultimate sacrifice that ${userName} had made for them`);
     if (userWins>=3 && userHP>0) {console.warn(`Just kidding!\n*Final Death Rattle* \n\t -Grant \n${userName} is WINNER!  Grant the Mighty is Defeat`)}
-    else {console.error(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
+    if (userWins<3) {console.error(`HAHAHAHAHA you ${userName} are defeat, I am champion still!`)};
 }
 
 // function getDamage(){
@@ -155,7 +151,7 @@ function startCombat(){
 // wondering if I should set the userWeapon to objects w/ type, damage, and attacktyped properties...
 /* lets see what that would look like: */
 
-function weaponSelection(weaponSelection){
+function weaponSelection(){
     let weaponSelection = prompt("Select your weapon:\n\t-Fists\n\t-Sword\n\t-Glock\n\t-BFG").toLowerCase();
     switch(weaponSelection){
         case "fists": userWeapon ={type: "fists", attackType : "punches"}; break; // removed userAttackDamage from object because
@@ -163,9 +159,10 @@ function weaponSelection(weaponSelection){
         case "glock": userWeapon ={type: "glock", attackType : "fires"}; break; // uninteresting and sometimes impossible, made a new switch in
         case "bfg": userWeapon ={type: "bfg", attackType : "kerpows"}; break; // the function damageCalculation()
         case "upupdowndownleftrightleftrightba": userWeapon={type: "battle-axe", attackType : "swings"}; break; // Grant's battle-axe, only the l337 pl4y3r5 c4n u53 17!
-        default: console.error("ERROR"); break;}
-        return userWeapon;
+        default: console.error("ERROR"); break;
     }
+        return userWeapon;
+}
 function damageCalculation(){
    let userAttackDamage;
     switch(userWeapon.type){
