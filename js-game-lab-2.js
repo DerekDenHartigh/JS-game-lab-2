@@ -111,14 +111,70 @@ function startCombat(){
     let retreat = false;
     let userHP = getDifficulty();
     let userWeapon = weaponSelection(); // this should define user weapon by user selection
+
+
+/*
+more fun =
+I make a weapon array, worst weapons to best, buff up the switch selection, and as a part of game difficulty I could
+run a loop to pop off the best weapons from the end of the array (say the best 3 for easy, pop none for impossible), then choose
+grant's weapon 'randomly' from the remaining array, return that weapon, and use that weapon in the getDamage() like the hard coded
+"battle-axe" to give Grant varaible damage.
+*/
+let n;
+let grantsWeapon = grantsWeaponSelection();
+// let grantsWeaponArray = ["bfg","glock","battle-axe","sword","fists"];
+let modifiedWeaponArray;
+
+function grantsWeaponArrayReduction(){
+    let grantsWeaponArray = ["bfg","glock","battle-axe","sword","fists"];
+    let modifiedWeaponArray;
+    while (n<5){
+ modifiedWeaponArray = grantsWeaponArray.pop();
+    n++;
+    }
+    return modifiedWeaponArray; // sends it to grantsWEaponSelection()
+}
+
+function grantsWeaponSelection(){
+    switch(userHP){ // initally had gameDifficulty here but that value was never returned, but userHP was..
+    case 100:
+        n=1; 
+        grantsWeaponArrayReduction();
+        break;
+    case 40:
+        n=2; 
+        grantsWeaponArrayReduction();
+        break;
+    case 20:
+        n=3; 
+        grantsWeaponArrayReduction();
+        break;
+    case 1:
+        n=5; // grants weaponArrayReduction(doesn't loop, returns full array)
+        grantsWeaponArrayReduction();
+        break;
+    default: console.log("ERROR"); break;
+    }
+    modifiedWeaponArray = grantsWeaponSelection();
+    let grantsWeapon = modifiedWeaponArray[Math.floor(Math.random()*modifiedWeaponArray.length)]; // randomly chooses weapon from modified/reduced array
+    console.warn(grantsWeapon);
+    return grantsWeapon;
+}
+
+
+
     while (userHP>0 && userWins<3 && retreat===false){
         let retreatResponse = prompt("Do you wish to flee?").toLowerCase();
         if (retreatResponse==="yes"||retreatResponse==="ya"||retreatResponse==="yeah"||retreatResponse==="yeet"||retreatResponse==="yup"||retreatResponse==="uhuh"||retreatResponse==="affirmative"||retreatResponse==="fo sho"||retreatResponse==="you know it"){
             retreat = true; break;
         }
-        userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0 - was going to call a function for Grant's battleaxe, but was having trouble calling the same function as I use to generate Grant's damage - i.e. the damage outputs were equal
+        // userHP-=Math.floor((Math.random()*7)); // I gave grant a battleaxe in v2.0 - was going to call a function for Grant's battleaxe, but was having trouble calling the same function as I use to generate Grant's damage - i.e. the damage outputs were equal
+        // userHP-=damageCalculation("battle-axe"); // hard coded solution that iteract with damageCalculation
+        userHP -= damageCalculation(grantsWeapon);
         grantHP-= damageCalculation(userWeapon.type);
-        console.error(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
+        // console.error(`Grant swings his battle-axe at ${userName},\n\t${userName}'s HP = ${userHP}`);
+        console.error(`Grant attacks with his ${grantsWeapon} at ${userName},\n\t${userName}'s HP = ${userHP}`);
+
         console.log(`${userName} ${userWeapon.attackType} at Grant with their ${userWeapon.type},\n\tGrant's HP = ${grantHP}`);
         if (grantHP<=0){
             console.warn("I am REBORN!!!\n\t-Grant")
